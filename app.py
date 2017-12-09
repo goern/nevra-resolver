@@ -2,6 +2,7 @@
 #
 
 import logging
+import json
 import http
 
 import tornado.httpserver
@@ -31,10 +32,21 @@ class MainHandler(tornado.web.RequestHandler):
 
             subject = dnf.subject.Subject(q)
 
+            results = []
+
             for nevra_obj in subject.get_nevra_possibilities(forms=[hawkey.FORM_NEVRA]):
-                self.write("{} {} {} {} {}".format(nevra_obj.name, nevra_obj.epoch,
-                           nevra_obj.version, nevra_obj.release, nevra_obj.arch))
-                
+                # nevra_obj.name, nevra_obj.epoch, nevra_obj.version, nevra_obj.release, nevra_obj.arch
+
+                result = {}
+                result['name'] = nevra_obj.name
+                result['version'] = nevra_obj.version
+                result['release'] = nevra_obj.release
+                result['arch'] = nevra_obj.arch
+
+                results.append(result)
+
+            self.write(json.dumps(results))
+
 
 def main():
     application = tornado.web.Application([
