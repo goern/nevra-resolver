@@ -2,6 +2,16 @@
 
 web service to parse nevra and return json
 
+# Deployment
+
+```bash
+oc new-build --strategy docker --name nevra-resolver .
+oc start-build  nevra-resolver --from-dir .
+oc new-app nevra-resolver
+oc expose service newra-resolver
+
+```
+
 ## Copyright
 
 Copyright (C) 2017 Red Hat Inc.
